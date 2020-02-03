@@ -1,0 +1,12 @@
+[submodule "rust/druid-embedded"]
+	path = rust/druid-embedded
+	url = git@github.com:lupyuen/druid-embedded.git
+[submodule "rust/piet-embedded"]
+	path = rust/piet-embedded
+	url = git@github.com:lupyuen/piet-embedded.git
+[submodule "rust/kurbo-embedded"]
+	path = rust/kurbo-embedded
+	url = git@github.com:lupyuen/kurbo-embedded.git
+[submodule "rust/st7735-lcd-batch-rs"]
+	path = rust/st7735-lcd-batch-rs
+	url = git@github.com:lupyuen/st7735-lcd-batch-rs.git
