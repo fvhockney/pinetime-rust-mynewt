@@ -44,6 +44,10 @@ mod ui;             //  druid UI app
 #[cfg(feature = "use_float")]    //  If floating-point is enabled...
 mod gps_sensor;     //  GPS Sensor functions
 
+mod button;
+mod battery;
+mod backlight;
+
 use core::panic::PanicInfo; //  Import `PanicInfo` type which is used by `panic()` below
 use cortex_m::asm::bkpt;    //  Import cortex_m assembly function to inject breakpoint
 use mynewt::{
@@ -87,6 +91,10 @@ extern "C" fn main() -> ! {  //  Declare extern "C" because it will be called by
     //  Start the touch sensor
     touch_sensor::start_touch_sensor()
         .expect("TCH fail");
+
+    battery::is_charging();
+    let bl = backlight::Backlight::init();
+    button::initialize_button(bl).expect("initializing failed");
 
     //  Test the touch sensor
     //  touch_sensor::test()

@@ -33,7 +33,7 @@ pub mod util;                     //  Mynewt Utility API. Export folder `encodin
 pub mod libs;                     //  Mynewt Custom API. Export folder `libs` as Rust module `mynewt::libs`
 
 mod hal;                            //  Import module `hal` for Embedded HAL functions but don't export it
-pub use hal::{ Delay, GPIO, SPI };  //  Export `hal` types GPIO and SPI
+pub use hal::{ Delay, GPIO, SPI, GpioPullType };  //  Export `hal` types GPIO and SPI
 
 pub mod spi;  //  Export Non-Blocking SPI API
 

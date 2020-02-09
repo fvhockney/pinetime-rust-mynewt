@@ -52,6 +52,13 @@ impl embedded_hal::blocking::spi::Write<u8> for SPI {
     type Error = crate::result::MynewtError;
 }
 
+#[repr(u32)]
+pub enum GpioPullType {
+    DOWN = hal::hal_gpio_pull_HAL_GPIO_PULL_DOWN,
+    UP = hal::hal_gpio_pull_HAL_GPIO_PULL_UP,
+    NONE = hal::hal_gpio_pull_HAL_GPIO_PULL_NONE,
+}
+
 /// Rust Embedded HAL interface for Mynewt GPIO
 impl GPIO {
     /// Create a new output GPIO pin
@@ -59,6 +66,25 @@ impl GPIO {
         GPIO {
             pin: 0,
         }
+    }
+
+    pub fn set_pin(mut self, pin: i32) -> Self {
+        self.pin = pin;
+        self
+    }
+
+    pub fn init_in(mut self, pin: i32, pull: GpioPullType ) -> Self {
+        let rc = unsafe { hal::hal_gpio_init_in(pin, pull as u32)};
+        assert_eq!(rc, 0, "gpio init_in failed");
+        self.pin = pin;
+        self
+    }
+
+    pub fn init_out(mut self, pin: i32) -> Self {
+        let rc = unsafe { hal::hal_gpio_init_out(pin, 0) };
+        assert_eq!(rc, 0, "gpio fail");
+        self.pin = pin;
+        self
     }
 
     /// Initialise the output GPIO pin
@@ -69,6 +95,12 @@ impl GPIO {
         assert_eq!(rc, 0, "gpio fail");
         self.pin = pin;
         Ok(())
+    }
+
+    pub fn read_state(self) -> MynewtResult<i32> {
+        let state = unsafe { hal::hal_gpio_read(self.pin) };
+        assert!(state == 1 || state == 0, "state not 0 or 1");
+        Ok(state)
     }
 }
 
@@ -119,6 +151,7 @@ pub struct SPI {
 }
 
 /// Rust Embedded HAL interface for Mynewt GPIO
+#[derive(Clone,Copy)]
 pub struct GPIO {
     /// Mynewt GPIO pin number
     pin: i32,
